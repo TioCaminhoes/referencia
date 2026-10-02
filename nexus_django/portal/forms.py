@@ -1,0 +1,22 @@
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import ContactMessage,NewsletterSubscriber,Appointment
+
+class SignUpForm(UserCreationForm):
+    email=forms.EmailField(required=True)
+    first_name=forms.CharField(max_length=80,required=True,label="Nome")
+    class Meta: model=User; fields=("first_name","username","email","password1","password2")
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model=ContactMessage; fields=("name","email","subject","message")
+        widgets={"message":forms.Textarea(attrs={"rows":6})}
+
+class NewsletterForm(forms.ModelForm):
+    class Meta: model=NewsletterSubscriber; fields=("email",)
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model=Appointment; fields=("service","date","time","notes")
+        widgets={"date":forms.DateInput(attrs={"type":"date"}),"time":forms.TimeInput(attrs={"type":"time"}),"notes":forms.Textarea(attrs={"rows":4,"placeholder":"Alguma observação?"})}
